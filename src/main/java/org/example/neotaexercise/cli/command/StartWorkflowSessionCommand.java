@@ -4,11 +4,12 @@
 package org.example.neotaexercise.cli.command;
 
 import java.io.PrintStream;
-import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.function.Function;
+import org.example.neotaexercise.domain.ProcessCommand;
 import org.example.neotaexercise.domain.WorkflowDefinition;
 import org.example.neotaexercise.domain.WorkflowSession;
 
@@ -23,13 +24,16 @@ public class StartWorkflowSessionCommand implements CliCommand {
     private static final String COMMAND = "start-workflow";
 
     private final Function<String, Optional<WorkflowDefinition>> getDefinition;
-    private final BiConsumer<String, WorkflowSession> startSession;
+    private final BiConsumer<String, WorkflowSession> storeSession;
+    private final Consumer<ProcessCommand> startSession;
 
     public StartWorkflowSessionCommand(
         Function<String, Optional<WorkflowDefinition>> getDefinition,
-        BiConsumer<String, WorkflowSession> startSession
+        BiConsumer<String, WorkflowSession> storeSession,
+        Consumer<ProcessCommand> startSession
     ) {
         this.getDefinition = getDefinition;
+        this.storeSession = storeSession;
         this.startSession = startSession;
     }
 
@@ -43,13 +47,10 @@ public class StartWorkflowSessionCommand implements CliCommand {
 
         final var id = parseIdOrElseThrow(command, COMMAND, "workflowId");
 
-        final var startingNode = getDefinition.apply(id)
-            .map(WorkflowDefinition::getStartingNode)
-            .orElseThrow(() -> new CommandFormatException("Workflow definition with id " + id + " does not exist"));
-
         final var sessionId = UUID.randomUUID().toString();
 
-        startSession.accept(sessionId, new WorkflowSession(startingNode, id));
+        storeSession.accept(sessionId, new WorkflowSession(id));
+        startSession.accept(new ProcessCommand(sessionId, ProcessCommand.Command.START_PROCESS));
 
         out.println("Started a workflow session with id " + sessionId);
     }

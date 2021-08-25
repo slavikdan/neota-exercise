@@ -21,6 +21,7 @@ public class GetCurrentSessionStatusCommand implements CliCommand {
     private static final String COMMAND = "session-state";
 
     private final Function<String, Optional<WorkflowSession>> workflowSession;
+
     private final Function<String, Optional<WorkflowDefinition>> workflowDefinition;
 
     public GetCurrentSessionStatusCommand(
@@ -45,7 +46,7 @@ public class GetCurrentSessionStatusCommand implements CliCommand {
         final var definition = workflowDefinition.apply(session.getDefinitionId())
             .orElseThrow(() -> new CommandFormatException("No definition with id " + session.getDefinitionId() + " found"));
 
-        if (isStarting(session, definition)) {
+        if (isStarting(session)) {
             out.println("Starting");
             return;
         }
@@ -55,32 +56,36 @@ public class GetCurrentSessionStatusCommand implements CliCommand {
             return;
         }
 
-        out.println(getLine(session, definition) + " " + getTask(session, definition) + " " + getProcessStatus(session));
+        if (isProcessed(session)) {
+            out.println(session.getCurrentNode()
+                .flatMap(definition::getNode)
+                .map(n -> Optional.ofNullable(n.getName()).orElse(n.getId()))
+                .orElse("There should be one ") + " in progress");
+            return;
+        }
 
-    }
-
-    private static String getProcessStatus(WorkflowSession session) {
-        return session.isBeingProcessed() ? "in progress" : "completed";
-    }
-
-    private static String getTask(WorkflowSession session, WorkflowDefinition definition) throws CommandException {
-        return definition.getNode(session.getCurrentNode())
-            .map(WorkflowDefinitionDto.Node::getName)
-            .orElseThrow(() -> new CommandException("No node " + session.getCurrentNode() + " specified"));
-    }
-
-    private static String getLine(WorkflowSession session, WorkflowDefinition definition) throws CommandException {
-        return definition.getNodeLane(session.getCurrentNode())
+        session.getCurrentNode()
+            .flatMap(definition::getNextNode)
+            .flatMap(definition::getNodeLane)
             .map(WorkflowDefinitionDto.Lane::getName)
-            .orElseThrow(() -> new CommandException("No lane for node " + session.getCurrentNode() + " specified"));
+            .ifPresentOrElse(out::println, () -> out.println("Something is missing somewhere"));
+
+
+    }
+
+    private boolean isProcessed(WorkflowSession session) {
+        return session.isBeingProcessed();
     }
 
     private static boolean isFinished(WorkflowSession session, WorkflowDefinition definition) {
-        return session.getCurrentNode().equals(definition.getEndNode());
+        return session.getCurrentNode()
+            .map(n -> n.equals(definition.getEndNode()))
+            .orElse(false)
+            ;
     }
 
-    private static boolean isStarting(WorkflowSession session, WorkflowDefinition definition) {
-        return session.getCurrentNode().equals(definition.getStartingNode());
+    private static boolean isStarting(WorkflowSession session) {
+        return session.getCurrentNode().isEmpty();
     }
 
     @Override

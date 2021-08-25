@@ -4,23 +4,30 @@
 package org.example.neotaexercise.domain;
 
 
+import java.util.Optional;
+
+
 /**
  * @author Daniel Slavik
  */
 public class WorkflowSession {
-    private final String currentNode;
+    private Optional<String> currentNode;
 
     private final String definitionId;
 
     private boolean beingProcessed;
 
-    public WorkflowSession(final String currentNode, final String definitionId) {
-        this.currentNode = currentNode;
+    public WorkflowSession(final String definitionId) {
+        this.currentNode = Optional.empty();
         this.definitionId = definitionId;
         this.beingProcessed = false;
     }
 
-    public String getCurrentNode() {
+    public void setCurrentNode(String currentNode) {
+        this.currentNode = Optional.of(currentNode);
+    }
+
+    public Optional<String> getCurrentNode() {
         return currentNode;
     }
 

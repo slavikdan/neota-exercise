@@ -71,8 +71,12 @@ public class WorkflowDefinition {
         return Optional.ofNullable(lanes.get(id));
     }
 
-    public boolean isNextNodeInDifferentLine(final String nodeId) {
+    public boolean isNextNodeInDifferentLane(final String nodeId) {
         return !lanes.get(nodeId).getId().equals(lanes.get(lines.get(nodeId)).getId());
+    }
+
+    public boolean isNodeInDifferentLane(final String nodeId1, final String nodeId2) {
+        return !lanes.get(nodeId1).getId().equals(lanes.get(nodeId2).getId());
     }
 
     public WorkflowDefinitionDto.Lane getLaneInFrontOfNode(final String nodeId) {
