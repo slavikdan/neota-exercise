@@ -26,6 +26,8 @@ import org.example.neotaexercise.worker.nodehandler.NopNodeHandler;
 import org.example.neotaexercise.worker.nodehandler.StartNodeHandler;
 import org.example.neotaexercise.worker.nodehandler.TaskNodeHandler;
 
+import static org.example.neotaexercise.util.LoggerUtils.logDebug;
+
 
 /**
  * @author Daniel Slavik
@@ -53,14 +55,14 @@ public class App {
         final var worker1 = createWorker("worker1");
         final var worker2 = createWorker("worker2");
 
-        OUT.println("Starting worker 1");
+        logDebug(OUT, "Starting worker 1");
         worker1.start();
 
-        OUT.println("Starting worker 2");
+        logDebug(OUT, "Starting worker 2");
         worker2.start();
 
 
-        OUT.println("Starting cli interface");
+        logDebug(OUT, "Starting cli interface");
 
         CliInterface.start(
             List.of(
@@ -75,10 +77,10 @@ public class App {
             IN
         );
 
-        OUT.println("Stopping worker 1");
+        logDebug(OUT, "Stopping worker 1");
         worker1.stopThread();
 
-        OUT.println("Stopping worker 2");
+        logDebug(OUT, "Stopping worker 2");
         worker2.stopThread();
     }
 

@@ -12,4 +12,11 @@ import java.time.Duration;
 public class BaseConfiguration {
 
     public static volatile Duration handlerSleepDuration = Duration.ofSeconds(60);
+
+    public static volatile LogLevel logLevel = LogLevel.DEBUG;
+
+    public enum LogLevel {
+        INFO,
+        DEBUG
+    }
 }

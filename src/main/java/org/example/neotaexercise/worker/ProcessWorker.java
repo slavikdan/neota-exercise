@@ -14,6 +14,8 @@ import org.example.neotaexercise.domain.WorkflowSession;
 import org.example.neotaexercise.dto.WorkflowDefinitionDto;
 import org.example.neotaexercise.worker.nodehandler.NodeHandler;
 
+import static org.example.neotaexercise.util.LoggerUtils.logDebug;
+
 
 /**
  * @author Daniel Slavik
@@ -59,19 +61,19 @@ public class ProcessWorker extends Thread {
 
     @Override
     public void run() {
-        out.println("Thread " + name + " started");
+        logDebug(out, "Thread " + name + " started");
 
         while (shouldRun) {
             commandSupplier.get().ifPresent(this::processCommand);
             sleep();
         }
 
-        out.println("Thread " + name + " stopped");
+        logDebug(out, "Thread " + name + " stopped");
     }
 
     public void processCommand(final ProcessCommand command) {
 
-        out.println("Thread " + name + " processing command " + command);
+        logDebug(out, "Thread " + name + " processing command " + command);
 
         WorkflowSession session = null;
 
@@ -100,7 +102,7 @@ public class ProcessWorker extends Thread {
 
 
             final var processedNode = node.get();
-            out.println("Thread " + name + " working with node " + processedNode);
+            logDebug(out, "Thread " + name + " working with node " + processedNode);
 
             session.setCurrentNode(processedNode);
 
@@ -111,7 +113,7 @@ public class ProcessWorker extends Thread {
             );
 
             if (node.map(n -> workflow.isNodeInDifferentLane(processedNode, n)).orElse(false)) {
-                out.println("Thread " + name + " we are on a line here :-)");
+                logDebug(out, "Thread " + name + " we are on a line here :-)");
                 return;
             }
 
