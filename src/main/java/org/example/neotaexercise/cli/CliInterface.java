@@ -10,6 +10,7 @@ import java.util.Locale;
 import java.util.Scanner;
 import org.example.neotaexercise.cli.command.CliCommand;
 import org.example.neotaexercise.cli.command.CommandException;
+import org.example.neotaexercise.config.BaseConfiguration;
 
 
 /**
@@ -36,7 +37,6 @@ public class CliInterface {
         final var scanner = new Scanner(in);
 
         while (shouldRun) {
-            out.print("Command: ");
             final var command = scanner.nextLine().toLowerCase(Locale.ROOT);
 
             if (HELP_COMMAND.equalsIgnoreCase(command)) {
@@ -71,8 +71,9 @@ public class CliInterface {
             c.consume(out, command);
         } catch (final CommandException e) {
             out.println("Unable to process command: " + e.getMessage());
-            //TODO maybe some debug option for this?
-            e.printStackTrace(out);
+            if (BaseConfiguration.LogLevel.DEBUG.equals(BaseConfiguration.logLevel)) {
+                e.printStackTrace(out);
+            }
         }
     }
 }

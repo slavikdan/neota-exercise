@@ -30,7 +30,7 @@ class CliInterfaceTest {
 
         assertArrayEquals(
             baos.toString().split("\n"),
-            List.of("I do recommend starting with command 'help' ;-)", "Command: Have a nice one :-)").toArray()
+            List.of("I do recommend starting with command 'help' ;-)", "Have a nice one :-)").toArray()
         );
     }
 
@@ -83,7 +83,7 @@ class CliInterfaceTest {
 
         assertArrayEquals(
             baos.toString().split("\n"),
-            List.of("I do recommend starting with command 'help' ;-)", "Command: Unknown command: do something", "Command: Have a nice one :-)").toArray()
+            List.of("I do recommend starting with command 'help' ;-)", "Unknown command: do something", "Have a nice one :-)").toArray()
         );
     }
 
