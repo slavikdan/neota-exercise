@@ -11,8 +11,10 @@ import java.util.UUID;
 import java.util.function.BiConsumer;
 import org.example.neotaexercise.domain.WorkflowDefinition;
 import org.example.neotaexercise.dto.WorkflowDefinitionDto;
+import org.example.neotaexercise.util.WorkflowValidationUtils;
 
 import static org.example.neotaexercise.util.CommandUtils.parseIdOrElseThrow;
+import static org.example.neotaexercise.util.WorkflowValidationUtils.validateWorkflow;
 
 
 /**
@@ -44,7 +46,13 @@ public class AddWorkflowCommand implements CliCommand {
         try {
             definition = OB.readValue(new File(path), WorkflowDefinitionDto.class);
         } catch (IOException e) {
-            throw new CommandException("Unable to read file " + path, e);
+            throw new CommandException("Unable to read file " + path + " because: " + e.getMessage(), e);
+        }
+
+        try {
+            validateWorkflow(definition);
+        } catch (WorkflowValidationUtils.ValidationException e) {
+            throw new CommandException(e.getMessage());
         }
 
         final var definitionId = UUID.randomUUID().toString();
