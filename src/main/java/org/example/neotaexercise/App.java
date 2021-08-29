@@ -114,6 +114,7 @@ public class App {
 
     private static ProcessWorker createWorker(final String name) {
         return new ProcessWorker(
+            2000,
             name,
             OUT,
             WORKFLOW_REPOSITORY::getDefinition,

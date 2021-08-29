@@ -24,7 +24,7 @@ public class TaskNodeHandler implements NodeHandler {
     @Override
     public Optional<String> process(ProcessContext context) {
         if (context.getCommand().isPresent() && !RESUME_PROCESS.equals(context.getCommand().get().getCommandType())) {
-            context.getOut().println("Command " + context.getCommand() + " not supported for node type " + context.getNode().getType());
+            context.getOut().println("Command " + context.getCommand().get().getCommandType() + " not supported for node type " + context.getNode().getType());
             return Optional.empty();
         }
 
