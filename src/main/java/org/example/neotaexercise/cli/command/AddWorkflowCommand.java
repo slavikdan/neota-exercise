@@ -7,14 +7,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.List;
 import java.util.UUID;
 import java.util.function.BiConsumer;
+import org.example.neotaexercise.cli.command.validation.ValidationException;
+import org.example.neotaexercise.cli.command.validation.WorkflowValidationRule;
 import org.example.neotaexercise.domain.WorkflowDefinition;
 import org.example.neotaexercise.dto.WorkflowDefinitionDto;
-import org.example.neotaexercise.util.WorkflowValidationUtils;
 
 import static org.example.neotaexercise.util.CommandUtils.parseIdOrElseThrow;
-import static org.example.neotaexercise.util.WorkflowValidationUtils.validateWorkflow;
 
 
 /**
@@ -27,9 +28,14 @@ public class AddWorkflowCommand implements CliCommand {
     private static final ObjectMapper OB = new ObjectMapper();
 
     private final BiConsumer<String, WorkflowDefinition> storeDefinition;
+    private final List<WorkflowValidationRule> validationRules;
 
-    public AddWorkflowCommand(final BiConsumer<String, WorkflowDefinition> storeDefinition) {
+    public AddWorkflowCommand(
+        final BiConsumer<String, WorkflowDefinition> storeDefinition,
+        final List<WorkflowValidationRule> validationRules
+    ) {
         this.storeDefinition = storeDefinition;
+        this.validationRules = validationRules;
     }
 
     @Override
@@ -50,8 +56,10 @@ public class AddWorkflowCommand implements CliCommand {
         }
 
         try {
-            validateWorkflow(definition);
-        } catch (WorkflowValidationUtils.ValidationException e) {
+            for (final var rule: validationRules) {
+                rule.validate(definition);
+            }
+        } catch (ValidationException e) {
             throw new CommandException(e.getMessage());
         }
 

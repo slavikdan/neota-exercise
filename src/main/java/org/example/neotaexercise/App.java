@@ -19,6 +19,12 @@ import org.example.neotaexercise.cli.command.ListWorkflowSessionsCommand;
 import org.example.neotaexercise.cli.command.ListWorkflowsCommand;
 import org.example.neotaexercise.cli.command.ResumeSessionCommand;
 import org.example.neotaexercise.cli.command.StartWorkflowSessionCommand;
+import org.example.neotaexercise.cli.command.validation.AllNodesInOneLaneRule;
+import org.example.neotaexercise.cli.command.validation.HasBasicFieldsSourceRule;
+import org.example.neotaexercise.cli.command.validation.HasEndNodeRule;
+import org.example.neotaexercise.cli.command.validation.HasStartNodeRule;
+import org.example.neotaexercise.cli.command.validation.NoCycleRule;
+import org.example.neotaexercise.cli.command.validation.WorkflowValidationRule;
 import org.example.neotaexercise.config.BaseConfiguration;
 import org.example.neotaexercise.db.WorkflowRepository;
 import org.example.neotaexercise.db.WorkflowSessionRepository;
@@ -39,6 +45,7 @@ import static org.example.neotaexercise.util.LoggerUtils.logDebug;
 public class App {
 
     private static final String DEBUG_OPTION = "debug";
+
     private static final String SLEEP_OPTION = "sleep";
 
     public static PrintStream OUT = System.out;
@@ -51,6 +58,13 @@ public class App {
         new TaskNodeHandler(),
         new NopNodeHandler()
     );
+
+    private static final List<WorkflowValidationRule> VALIDATION_RULES = List.of(
+        new HasBasicFieldsSourceRule(),
+        new HasStartNodeRule(),
+        new HasEndNodeRule(),
+        new AllNodesInOneLaneRule(),
+        new NoCycleRule());
 
     private static final WorkflowRepository WORKFLOW_REPOSITORY = new WorkflowRepository();
 
@@ -76,7 +90,7 @@ public class App {
 
         CliInterface.start(
             List.of(
-                new AddWorkflowCommand(WORKFLOW_REPOSITORY::store),
+                new AddWorkflowCommand(WORKFLOW_REPOSITORY::store, VALIDATION_RULES),
                 new ListWorkflowsCommand(WORKFLOW_REPOSITORY::getDefinitionIds),
                 new StartWorkflowSessionCommand(WORKFLOW_REPOSITORY::getDefinition, WORKFLOW_SESSION_REPOSITORY::store, COMMAND_QUEUE::add),
                 new ListWorkflowSessionsCommand(WORKFLOW_SESSION_REPOSITORY::getAllSessions),

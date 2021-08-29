@@ -77,7 +77,7 @@ class StartNodeHandlerTest {
         ));
 
         assertEquals(Optional.empty(), result);
-        assertEquals("Command RESUME_PROCESS not supported for node type TASK_NODE\n", out.toString());
+        assertEquals("Command RESUME_PROCESS not supported for node type START_NODE\n", out.toString());
     }
 
 }
