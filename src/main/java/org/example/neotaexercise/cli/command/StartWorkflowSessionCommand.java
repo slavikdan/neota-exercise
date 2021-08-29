@@ -47,6 +47,10 @@ public class StartWorkflowSessionCommand implements CliCommand {
 
         final var id = parseIdOrElseThrow(command, COMMAND, "workflowId");
 
+        if(getDefinition.apply(id).isEmpty()) {
+            throw new CommandFormatException("No workflow with id " + id + " found");
+        }
+
         final var sessionId = UUID.randomUUID().toString();
 
         storeSession.accept(sessionId, new WorkflowSession(id));

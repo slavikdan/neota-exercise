@@ -15,7 +15,7 @@ public class ListWorkflowSessionsCommand implements CliCommand {
 
     private static final String COMMAND = "list-sessions";
 
-    private Supplier<Set<String>> allSessionIds;
+    private final Supplier<Set<String>> allSessionIds;
 
     public ListWorkflowSessionsCommand(Supplier<Set<String>> getAllSessionIds) {
         this.allSessionIds = getAllSessionIds;

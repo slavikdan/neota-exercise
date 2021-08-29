@@ -23,8 +23,9 @@ public class WorkflowSession {
         this.beingProcessed = false;
     }
 
-    public void setCurrentNode(String currentNode) {
-        this.currentNode = Optional.of(currentNode);
+    public WorkflowSession setCurrentNode(String currentNode) {
+        this.currentNode = Optional.ofNullable(currentNode);
+        return this;
     }
 
     public Optional<String> getCurrentNode() {

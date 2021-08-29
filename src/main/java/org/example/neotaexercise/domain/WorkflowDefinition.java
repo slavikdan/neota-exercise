@@ -27,7 +27,6 @@ public class WorkflowDefinition {
 
     private final Map<String, WorkflowDefinitionDto.Lane> lanes;
 
-    //TODO for all this there should be validation
     public WorkflowDefinition(final WorkflowDefinitionDto dto) {
         this.lines = dto.getSource().getLinks().values().stream()
             .map(line -> Map.entry(line.getFrom(), line.getTo()))
@@ -51,6 +50,20 @@ public class WorkflowDefinition {
             .orElseThrow();
     }
 
+    public WorkflowDefinition(
+        String startingNode,
+        String endNode,
+        Map<String, String> lines,
+        Map<String, WorkflowDefinitionDto.Node> nodes,
+        Map<String, WorkflowDefinitionDto.Lane> lanes
+    ) {
+        this.startingNode = startingNode;
+        this.endNode = endNode;
+        this.lines = lines;
+        this.nodes = nodes;
+        this.lanes = lanes;
+    }
+
     public String getStartingNode() {
         return startingNode;
     }
@@ -71,15 +84,7 @@ public class WorkflowDefinition {
         return Optional.ofNullable(lanes.get(id));
     }
 
-    public boolean isNextNodeInDifferentLane(final String nodeId) {
-        return !lanes.get(nodeId).getId().equals(lanes.get(lines.get(nodeId)).getId());
-    }
-
     public boolean isNodeInDifferentLane(final String nodeId1, final String nodeId2) {
         return !lanes.get(nodeId1).getId().equals(lanes.get(nodeId2).getId());
-    }
-
-    public WorkflowDefinitionDto.Lane getLaneInFrontOfNode(final String nodeId) {
-        return lanes.get(lines.get(nodeId));
     }
 }
