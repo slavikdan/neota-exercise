@@ -38,6 +38,7 @@ public class ProcessWorker extends Thread {
     private final List<NodeHandler> nodeHandlers;
 
     public ProcessWorker(
+        int sleepDuration,
         String name,
         PrintStream out,
         Function<String, Optional<WorkflowDefinition>> workflowSupp,
@@ -45,7 +46,7 @@ public class ProcessWorker extends Thread {
         Supplier<Optional<ProcessCommand>> commandSupplier,
         List<NodeHandler> nodeHandlers
     ) {
-        this.sleepDuration = 2000;
+        this.sleepDuration = sleepDuration;
         this.shouldRun = true;
         this.name = name;
         this.out = out;
