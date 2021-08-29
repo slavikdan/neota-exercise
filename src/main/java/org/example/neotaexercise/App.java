@@ -5,6 +5,9 @@ package org.example.neotaexercise;
 
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.time.Duration;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Queue;
@@ -16,6 +19,7 @@ import org.example.neotaexercise.cli.command.ListWorkflowSessionsCommand;
 import org.example.neotaexercise.cli.command.ListWorkflowsCommand;
 import org.example.neotaexercise.cli.command.ResumeSessionCommand;
 import org.example.neotaexercise.cli.command.StartWorkflowSessionCommand;
+import org.example.neotaexercise.config.BaseConfiguration;
 import org.example.neotaexercise.db.WorkflowRepository;
 import org.example.neotaexercise.db.WorkflowSessionRepository;
 import org.example.neotaexercise.domain.ProcessCommand;
@@ -33,6 +37,9 @@ import static org.example.neotaexercise.util.LoggerUtils.logDebug;
  * @author Daniel Slavik
  */
 public class App {
+
+    private static final String DEBUG_OPTION = "debug";
+    private static final String SLEEP_OPTION = "sleep";
 
     public static PrintStream OUT = System.out;
 
@@ -52,6 +59,9 @@ public class App {
     private static final Queue<ProcessCommand> COMMAND_QUEUE = new ConcurrentLinkedQueue<>();
 
     public static void main(String... params) {
+
+        parseConfiguration(params);
+
         final var worker1 = createWorker("worker1");
         final var worker2 = createWorker("worker2");
 
@@ -82,6 +92,24 @@ public class App {
 
         logDebug(OUT, "Stopping worker 2");
         worker2.stopThread();
+    }
+
+    private static void parseConfiguration(String[] params) {
+        final var arguments = Optional.ofNullable(params).map(i -> new LinkedList<>(Arrays.asList(params)))
+            .orElse(new LinkedList<>());
+
+        if (arguments.contains(DEBUG_OPTION)) {
+            BaseConfiguration.logLevel = BaseConfiguration.LogLevel.DEBUG;
+        }
+
+        if (arguments.contains(SLEEP_OPTION)) {
+            final var argumentIndex = arguments.indexOf(SLEEP_OPTION) + 1;
+            if (argumentIndex < arguments.size()) {
+                BaseConfiguration.handlerSleepDuration = Duration.parse(arguments.get(argumentIndex));
+            } else {
+                OUT.println("sleep argument needs to have duration");
+            }
+        }
     }
 
     private static ProcessWorker createWorker(final String name) {

@@ -13,7 +13,7 @@ public class BaseConfiguration {
 
     public static volatile Duration handlerSleepDuration = Duration.ofSeconds(60);
 
-    public static volatile LogLevel logLevel = LogLevel.DEBUG;
+    public static volatile LogLevel logLevel = LogLevel.INFO;
 
     public enum LogLevel {
         INFO,

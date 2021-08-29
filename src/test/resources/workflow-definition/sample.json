@@ -1,0 +1,97 @@
+{
+  "source": {
+    "nodes": {
+      "9175d33b-957e-440f-85a6-92d290fc3d2d": {
+        "id": "9175d33b-957e-440f-85a6-92d290fc3d2d",
+        "type": "StartNode"
+      },
+      "a70931cb-63bd-444e-9bb9-c19c099dd222": {
+        "id": "a70931cb-63bd-444e-9bb9-c19c099dd222",
+        "type": "TaskNode",
+        "name": "Task1"
+      },
+      "85f08553-ca2c-4cb2-b761-a80994118027": {
+        "id": "85f08553-ca2c-4cb2-b761-a80994118027",
+        "type": "EndNode"
+      },
+      "d5e725cd-1bc9-4e49-bceb-b7dc56d646b2": {
+        "id": "d5e725cd-1bc9-4e49-bceb-b7dc56d646b2",
+        "type": "TaskNode",
+        "name": "Task2"
+      },
+      "3cbc8581-07a8-4207-adfd-3ac955f41b70": {
+        "id": "3cbc8581-07a8-4207-adfd-3ac955f41b70",
+        "type": "TaskNode",
+        "name": "Task3"
+      },
+      "68590ae3-ea1d-4a35-9806-97880a136a48": {
+        "id": "68590ae3-ea1d-4a35-9806-97880a136a48",
+        "type": "TaskNode",
+        "name": "Task4"
+      },
+      "f9b28088-4953-40b4-aed1-b73962d67bfb": {
+        "id": "f9b28088-4953-40b4-aed1-b73962d67bfb",
+        "type": "NOP"
+      }
+    },
+    "lanes": {
+      "96c83fad-bd58-498b-a061-42ce5bc17b15": {
+        "id": "96c83fad-bd58-498b-a061-42ce5bc17b15",
+        "name": "lane1",
+        "nodes": [
+          "9175d33b-957e-440f-85a6-92d290fc3d2d",
+          "a70931cb-63bd-444e-9bb9-c19c099dd222",
+          "d5e725cd-1bc9-4e49-bceb-b7dc56d646b2"
+        ]
+      },
+      "2e0a3ce2-5dd3-4cec-97c8-37d358bc80d8": {
+        "id": "2e0a3ce2-5dd3-4cec-97c8-37d358bc80d8",
+        "name": "lane2",
+        "nodes": [
+          "3cbc8581-07a8-4207-adfd-3ac955f41b70"
+        ]
+      },
+      "52d065c6-749b-45f7-9d31-a37c78a4b092": {
+        "id": "52d065c6-749b-45f7-9d31-a37c78a4b092",
+        "name": "lane3",
+        "nodes": [
+          "f9b28088-4953-40b4-aed1-b73962d67bfb",
+          "68590ae3-ea1d-4a35-9806-97880a136a48",
+          "85f08553-ca2c-4cb2-b761-a80994118027"
+        ]
+      }
+    },
+    "links": {
+      "271c9ff9-2d5f-496e-9183-865c4ae6f9f9": {
+        "id": "271c9ff9-2d5f-496e-9183-865c4ae6f9f9",
+        "from": "9175d33b-957e-440f-85a6-92d290fc3d2d",
+        "to": "a70931cb-63bd-444e-9bb9-c19c099dd222"
+      },
+      "7e95ae48-891a-4e7c-b5f7-c09f4e8798b2": {
+        "id": "7e95ae48-891a-4e7c-b5f7-c09f4e8798b2",
+        "from": "a70931cb-63bd-444e-9bb9-c19c099dd222",
+        "to": "d5e725cd-1bc9-4e49-bceb-b7dc56d646b2"
+      },
+      "88677cce-c09e-4048-99a4-d8ff6944be43": {
+        "id": "88677cce-c09e-4048-99a4-d8ff6944be43",
+        "from": "d5e725cd-1bc9-4e49-bceb-b7dc56d646b2",
+        "to": "3cbc8581-07a8-4207-adfd-3ac955f41b70"
+      },
+      "a32b2027-6fd5-4993-aa3d-bbe726e95200": {
+        "id": "a32b2027-6fd5-4993-aa3d-bbe726e95200",
+        "from": "3cbc8581-07a8-4207-adfd-3ac955f41b70",
+        "to": "f9b28088-4953-40b4-aed1-b73962d67bfb"
+      },
+      "99611b1d-6bcc-4e1c-aa0a-0fa8c71d3112": {
+        "id": "99611b1d-6bcc-4e1c-aa0a-0fa8c71d3112",
+        "from": "f9b28088-4953-40b4-aed1-b73962d67bfb",
+        "to": "68590ae3-ea1d-4a35-9806-97880a136a48"
+      },
+      "5ef8d597-77fe-4eac-8537-50d530753020": {
+        "id": "5ef8d597-77fe-4eac-8537-50d530753020",
+        "from": "68590ae3-ea1d-4a35-9806-97880a136a48",
+        "to": "85f08553-ca2c-4cb2-b761-a80994118027"
+      }
+    }
+  }
+}

@@ -65,7 +65,7 @@ class CliInterfaceTest {
         final var result = baos.toString().split("\n");
 
         assertEquals(4, result.length);
-        assertEquals("Command: " + helpMessage, result[1]);
+        assertEquals(helpMessage, result[1]);
     }
 
     @Test
